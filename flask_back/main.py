@@ -34,8 +34,8 @@ def promote_user():
     return ''
 
 @app.route('/user/<user_id>', methods=['DELETE'])
-def delete_user();
-    rerurn ''
+def delete_user():
+    return ''
 
 @app.route("/")
 def my_index():
