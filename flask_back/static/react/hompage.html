@@ -1,0 +1,65 @@
+<html>
+	<head>
+		<title>GovSec DB</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- This path to .css is wrong -->
+		<link rel="stylesheet" href='/src/index.css'/>
+	</head>
+	<body>
+		<h1>Government Secrets DB</h1>
+		<h2>Login for access to government secrets.</h2>
+		<form action="" method="post" id="formOne">
+			<fieldset>
+					<legend>Login</legend>
+					<p>
+						<label>Username</label>
+						<input type="text" 
+							   placeholder="user@govsec.gov"
+							   name = "username"
+							   value = "{{ request.form.username }}"/>
+					</p>
+					<p>
+						<label>Password</label>
+						<input type = "password"
+							   placeholder="Password"
+							   name = "password"
+							   value = "{{ request.form.password }}"/>
+					</p>
+					<p>
+						<input class="btn btn-default" 
+							   type="submit"
+							   name="submit_button"
+							   value="Login"/>
+					</p>
+					{% if error %}
+						<p class="error"><strong>Error:</strong> {{ error }}</p>
+					{% endif %}
+			</fieldset>
+		</form>
+		<form action="" method="post" id="formTwo">
+			<h2>What do you think of this site?</h2>
+			<fieldset>
+				<legend>Comments</legend>
+				<p>
+					<label>Anonymous Comment</label>
+					<textarea name="comment"
+							  rows="3"
+							  cols="80"
+							  placeholder="This site is so cool!"
+							  value="{{ request.form.comment }}"></textarea>
+				</p>
+				<p>
+					<input class="btn btn-default"
+						   type="submit"
+						   name="submit_button"
+						   value="Post Comment"/>
+				</p>
+			</fieldset>
+		</form>
+		<h2>What others think:</h2>
+		{% for post in posts %}
+			<strong>anonymous </strong> {{ post.comment }}<br>
+			<br>
+		{% endfor %}
+	</body>
+</html>

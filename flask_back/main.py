@@ -7,13 +7,14 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 import datetime
 from functools import wraps
-
+from flask_cors import CORS
 app = flask.Flask(__name__)
 
 app.config['SECRET_KEY'] = 'thisissecret'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/unclesam/HAVIC_XSS_2/flask_back/db/todo.db'
 
 db = SQLAlchemy(app)
+CORS(app)
 # Example for creating a db of User's and their todo tasks
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -52,12 +53,11 @@ def token_required(f):
 
     return decorated
 
-@app.route('/user', methods=['GET'])
-@token_required
-def get_all_users(current_user):
+@app.route('/users', methods=['GET'])
+def get_all_users():
     
-    if not current_user.admin:
-        return jsonify({'message' : 'Cannot perform that function!'})
+    #if not current_user.admin:
+    #    return jsonify({'message' : 'Cannot perform that function!'})
 
     users = User.query.all()
 
@@ -131,33 +131,58 @@ def delete_user(current_user, public_id):
     
     return jsonify({'message' : 'The user has been deleted!'})
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    auth = request.authorization
+    return jsonify({'token' : 'Sup babe.'})
+#    auth = request.authorization
+#
+#    if not auth or not auth.username or not auth.password:
+#        return make_response('Could not verify', 401, {'WWW-Authenticate' : 
+#            'Basic realm="Login required!"'})
+#
+#    user = User.query.filter_by(name=auth.username).first()
+#
+#    if not user:
+#        return make_response('Could not verify', 401, {'WWW-Authenticate' : 
+#            'Basic realm="Login required!"'})
+#
+#    if check_password_hash(user.password, auth.password):
+#        token = jwt.encode({'public_id' : user.public_id, 'exp' :
+#            datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},
+#            app.config['SECRET_KEY'])
+#        return jsonify({'token' : token.decode('UTF-8')})
+#
+#    return make_response('Could not verify', 401, {'WWW-Authenticate' : 
+#        'Basic realm="Login required!"'})
 
-    if not auth or not auth.username or not auth.password:
-        return make_response('Could not verify', 401, {'WWW-Authenticate' : 
-            'Basic realm="Login required!"'})
+@app.route('/secrets')
+#@token_required
+def secrets():
+    #allow only admins to this endpoint
+    return flask.render_template('secrets.html')
 
-    user = User.query.filter_by(name=auth.username).first()
-
-    if not user:
-        return make_response('Could not verify', 401, {'WWW-Authenticate' : 
-            'Basic realm="Login required!"'})
-
-    if check_password_hash(user.password, auth.password):
-        token = jwt.encode({'public_id' : user.public_id, 'exp' :
-            datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},
-            app.config['SECRET_KEY'])
-        return jsonify({'token' : token.decode('UTF-8')})
-
-    return make_response('Could not verify', 401, {'WWW-Authenticate' : 
-        'Basic realm="Login required!"'})
-
- 
-@app.route("/")
+@app.route('/', methods=['GET', 'POST'])
 def my_index():
-    return flask.render_template("index.html",token="Hello from Flask!") 
+    posts = []
+    error = None
+    
+    if request.method == 'POST':
+        if request.form['submit_button'] == 'Login':
+            user = User.query.filter_by(name=request.form['username']).first()
+
+            if not user:
+                error = "Login failed"
+    
+            if check_password_hash(user.password, request.form['password']):
+                token = jwt.encode({'public_id' : user.public_id, 'exp' :
+                    datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},
+                    app.config['SECRET_KEY'])
+                #instead of returning json. input jwt into header
+                return jsonify({'token' : token.decode('UTF-8')})
+            else:
+                error = "Login failed"
+
+    return flask.render_template('index.html', error=error, posts=posts) 
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
