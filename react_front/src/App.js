@@ -7,9 +7,9 @@ export default class App extends React.Component {
 	constructor(props){
 		super(props)
 		this.state = {
-			name: "",
-			//users: []
-		    jwt: ""
+			name: null,
+			//users: [],
+		    jwt: null 
 		}
 		//this.onSubmit = this.onSubmit.bind(this)
 	}
@@ -26,9 +26,10 @@ export default class App extends React.Component {
 		})
 		.catch(error=>{
 			console.log("GetUsers_ERROR")
-		})
-			//Get request for comments
-		axios.get("http://localhost:2223/login")
+		})*/
+
+		//Get request for comments
+		/*axios.get("http://localhost:2223/login")
 		.then(token => {
 			console.log(token.data.token)
 		})

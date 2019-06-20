@@ -5,26 +5,16 @@ export default class Login extends React.Component {
 	constructor(props){
 		super(props)
 		this.state = {
-			name: "",
-			hashed_password: ""
+			username: null,
+			password: null
 		}
 		this.onSubmit = this.onSubmit.bind(this)
+		this.onChange = this.onChange.bind(this)
 	}
 	componentDidMount(){
-		/*axios.get("http://localhost:2223/users")
-		.then(response => {
-			console.log(response.data.users)	
-			this.state({
-				users: response.data.users
-			})
-		})
-		.catch(error=>{
-			console.log("GetUsers_ERROR")
-		})*/
-			//Get request for comments
-		/*	
+
 		//request works here for some reason
-		axios.get("http://localhost:2223/login")
+		/*axios.get("http://localhost:2223/login")
 		.then(token => {
 			console.log(token.data.token)
 		})
@@ -34,16 +24,30 @@ export default class Login extends React.Component {
 
 	}
 
-	onSubmit(){
-			//This request is succesful, but axios does not think so
-		console.log("You clicked submit")
+	onSubmit(event){
+		//This request is succesful, but axios does not think so
+		//That was actually just a firefox thing (safari works)
+		/*console.log("You clicked submit")
 		axios.get("http://localhost:2223/login")
 		.then(toke => {
 			console.log(toke.data.token)
 		})
 		.catch(error=>{
 			console.log("Authentication_ERROR")
-		})
+		})*/
+		event.preventDefault()	
+		const data = {name: this.state.username, password: this.state.password};
+		console.log(data)
+		axios.post("http://localhost:2223/login", data);
+		
+		// Wait for respone (token)
+			//return error if no token
+		// Use token to get to protected page
+	}
+
+	onChange(event){
+		event.preventDefault()
+		this.setState({ [event.target.name]: event.target.value })
 	}
 
 	render(){
@@ -60,16 +64,18 @@ export default class Login extends React.Component {
 								<label>Username</label>
 	                	        <input type="text" 
 	                	               placeholder={name}
-	                	               name = "username"/>
+	                	               name = "username"
+									   onChange={this.onChange}/>
 	                	    </p>
 	                	    <p>
 	                	    	<label>Password</label>
 								<input type = "password"
 				    	               placeholder="Password"
-	                	               name = "password"/>
+	                	               name = "password"
+									   onChange={this.onChange}/>
 	                	    </p>
 	                	    <p>
-	                	        <button onClick={() => this.onSubmit()}>
+	                	        <button onClick={this.onSubmit}>
 										Submit</button>
 	                	    </p>
 	                	</fieldset>
