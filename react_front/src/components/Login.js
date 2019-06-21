@@ -6,42 +6,30 @@ export default class Login extends React.Component {
 		super(props)
 		this.state = {
 			username: null,
-			password: null
+			password: null,
+			error: null
 		}
 		this.onSubmit = this.onSubmit.bind(this)
 		this.onChange = this.onChange.bind(this)
 	}
-	componentDidMount(){
 
-		//request works here for some reason
-		/*axios.get("http://localhost:2223/login")
-		.then(token => {
-			console.log(token.data.token)
-		})
-		.catch(error=>{
-			console.log("Authentication_ERROR")
-		})*/
+	componentDidMount(){
 
 	}
 
 	onSubmit(event){
-		//This request is succesful, but axios does not think so
-		//That was actually just a firefox thing (safari works)
-		/*console.log("You clicked submit")
-		axios.get("http://localhost:2223/login")
-		.then(toke => {
-			console.log(toke.data.token)
-		})
-		.catch(error=>{
-			console.log("Authentication_ERROR")
-		})*/
 		event.preventDefault()	
+		this.setState({ error: null })
 		const data = {name: this.state.username, password: this.state.password};
 		console.log(data)
-		axios.post("http://localhost:2223/login", data);
-		
-		// Wait for respone (token)
-			//return error if no token
+		axios.post("http://localhost:2223/login", data)
+		.then(response=> {
+			console.log(response.data.token)
+		})
+		.catch(error=>{
+			this.setState({ error: "Login Failed." })
+			console.log(this.state.error)
+		});
 		// Use token to get to protected page
 	}
 
@@ -52,9 +40,6 @@ export default class Login extends React.Component {
 
 	render(){
 
-		let name = "user@govsec.gov"
-		//let users = this.state.users
-		//console.log(users)
 		return (
 	    	<div className="Login">
 	                <form action="" id="formOne">
@@ -63,7 +48,7 @@ export default class Login extends React.Component {
 	                	    <p>
 								<label>Username</label>
 	                	        <input type="text" 
-	                	               placeholder={name}
+	                	               placeholder = "user@govsec.gov"
 	                	               name = "username"
 									   onChange={this.onChange}/>
 	                	    </p>
@@ -78,6 +63,9 @@ export default class Login extends React.Component {
 	                	        <button onClick={this.onSubmit}>
 										Submit</button>
 	                	    </p>
+							<p>
+								{this.state.error}
+							</p>
 	                	</fieldset>
 	                </form>
 	    		</div>
