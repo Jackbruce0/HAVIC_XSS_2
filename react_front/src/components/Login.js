@@ -23,8 +23,9 @@ export default class Login extends React.Component {
 		const data = {name: this.state.username, password: this.state.password};
 		console.log(data)
 		axios.post("http://localhost:2223/login", data)
-		.then(response=> {
+		.then(response=>{
 			console.log(response.data.token)
+			this.setState({ error: "Login Successful!" })
 		})
 		.catch(error=>{
 			this.setState({ error: "Login Failed." })
@@ -46,17 +47,17 @@ export default class Login extends React.Component {
 	                	<fieldset>
 							<legend>Login</legend>
 	                	    <p>
-								<label>Username</label>
+								<label>Username </label>
 	                	        <input type="text" 
-	                	               placeholder = "user@govsec.gov"
-	                	               name = "username"
+	                	               placeholder="user@govsec.gov"
+	                	               name="username"
 									   onChange={this.onChange}/>
 	                	    </p>
 	                	    <p>
-	                	    	<label>Password</label>
-								<input type = "password"
+	                	    	<label>Password </label>
+								<input type="password"
 				    	               placeholder="Password"
-	                	               name = "password"
+	                	               name="password"
 									   onChange={this.onChange}/>
 	                	    </p>
 	                	    <p>

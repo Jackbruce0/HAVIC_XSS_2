@@ -2,6 +2,8 @@ import React from 'react';
 //import axios from 'axios';
 import './App.css';
 import Login from './components/Login';
+import CommentSubmit from './components/CommentSubmit';
+import CommentDisplay from './components/CommentDisplay'
 
 export default class App extends React.Component {
 	constructor(props){
@@ -49,6 +51,10 @@ export default class App extends React.Component {
 				<h1>Government Secrets DB</h1>
 	            	<h2>Login for access to government secrets.</h2>
 					<Login />
+					<h3>What do you think of this site?</h3>
+					<CommentSubmit />
+					<h3>What others think:</h3>
+					<CommentDisplay />
 	    		</div>
 	  		);
 	}

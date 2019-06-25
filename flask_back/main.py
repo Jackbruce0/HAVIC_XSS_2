@@ -11,7 +11,8 @@ from flask_cors import CORS
 app = flask.Flask(__name__)
 
 app.config['SECRET_KEY'] = 'thisissecret'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/unclesam/HAVIC_XSS_2/flask_back/db/todo.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/unclesam/HAVIC_XSS_2/flask_back/db/users_comments.db'
+app.jinja_env.autoescape = False #Enable XSS
 
 db = SQLAlchemy(app)
 CORS(app)
@@ -23,11 +24,16 @@ class User(db.Model):
     password = db.Column(db.String(80))
     admin = db.Column(db.Boolean)
 
-class Todo(db.Model):
+class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(50))
-    complete = db.Column(db.Boolean)
-    user_id = db.Column(db.Integer)
+    text = db.Column(db.String(1000))
+    username = db.Column(db.String(80))
+
+#class Todo(db.Model):
+#    id = db.Column(db.Integer, primary_key=True)
+#    text = db.Column(db.String(50))
+#    complete = db.Column(db.Boolean)
+#    user_id = db.Column(db.Integer)
 
 #Why are we using this instead of jwt_required method
 def token_required(f):
@@ -53,6 +59,7 @@ def token_required(f):
 
     return decorated
 
+# User endpoints
 @app.route('/users', methods=['GET'])
 def get_all_users():
     
@@ -103,8 +110,8 @@ def create_user():
     return jsonify({'message': 'New user created!'})
 
 @app.route('/user/<public_id>', methods=['PUT'])
-@token_required
-def promote_user(current_user, public_id):
+#@token_required
+def promote_user(public_id):
     
     user = User.query.filter_by(public_id=public_id).first()
     
@@ -131,9 +138,36 @@ def delete_user(current_user, public_id):
     
     return jsonify({'message' : 'The user has been deleted!'})
 
+#End of User endpoints
+
+# Comment end points
+@app.route('/comment', methods=['POST'])
+def post_comment():
+    data = request.get_json()
+    new_comment = Comment(text=data['text'], username=data['username'])
+    db.session.add(new_comment)
+    db.session.commit()
+
+    return jsonify({'message' : 'Comment submitted!'})
+
+@app.route('/comments', methods=['GET'])
+def get_all_comments():
+    comments = Comment.query.all()
+
+    output = []
+
+    for comment in comments:
+        comment_data = {}
+        comment_data['username'] = comment.username
+        comment_data['text'] = comment.text
+        output.append(comment_data)
+        
+    return jsonify({'comments' : output})
+
+#End of Comment end points
+
 @app.route('/login', methods=['POST'])
 def login():
-    # return jsonify({'token' : 'Sup babe.'})
     auth = request.json
 
     if not auth or not auth['name'] or not auth['password']:
