@@ -1,61 +1,36 @@
 import React from 'react';
 //import axios from 'axios';
 import './App.css';
-import Login from './components/Login';
-import CommentSubmit from './components/CommentSubmit';
-import CommentDisplay from './components/CommentDisplay'
+import Home from './components/Home';
+import Secret from './components/Secret';
+import {
+	BrowserRouter as Router,
+	Route,
+	Link,
+	Redirect,
+	Switch
+} from 'react-router-dom'
 
 export default class App extends React.Component {
 	constructor(props){
 		super(props)
 		this.state = {
 			name: null,
-			//users: [],
 		    jwt: null 
 		}
-		//this.onSubmit = this.onSubmit.bind(this)
-	}
-	componentDidMount(){
-		/*this.setState({
-			name: "user@govsec.gov"
-		})
-		/*axios.get("http://localhost:2223/users")
-		.then(response => {
-			console.log(response.data.users)	
-			this.state({
-				users: response.data.users
-			})
-		})
-		.catch(error=>{
-			console.log("GetUsers_ERROR")
-		})*/
-
-		//Get request for comments
-		/*axios.get("http://localhost:2223/login")
-		.then(token => {
-			console.log(token.data.token)
-		})
-		.catch(error=>{
-			console.log("Authentication_ERROR")
-		})*/
-
 	}
 
 	render(){
 
-		//let name = this.state.name
-		//let users = this.state.users
-		//console.log(users)
 		return (
 	    	<div className="App">
-				<h1>Government Secrets DB</h1>
-	            	<h2>Login for access to government secrets.</h2>
-					<Login />
-					<h3>What do you think of this site?</h3>
-					<CommentSubmit />
-					<h3>What others think:</h3>
-					<CommentDisplay />
-	    		</div>
+				<Router>
+					<Switch>
+						<Route path="/" exact component={Home} />
+						<Route path="/secret" exact component={Secret} />
+					</Switch>
+				</Router>
+			</div>
 	  		);
 	}
 }

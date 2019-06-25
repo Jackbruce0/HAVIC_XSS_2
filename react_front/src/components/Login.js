@@ -1,5 +1,33 @@
 import React from 'react';
 import axios from 'axios';
+import {
+	BrowserRouter as Router,
+	Route,
+	Link,
+	Redirect
+} from 'react-router-dom'
+
+const fakeAuth = {
+	isAuthenticated: false,
+	authenticate(cb) {
+		this.isAuthenticated = true
+		setTimeout(cb, 100) // fake async
+	},
+	signout(cb) {
+		this.isAuthenticated = false
+		setTimeout(cb, 100) // fake async
+	}
+}
+
+const Protected = () => <h3>Protected</h3>
+	
+const PrivateRoute = ({ component: Component, ...rest }) => (
+	<Route {...rest} render={(props) => (
+		fakeAuth.isAuthenticated === true
+			? <Component {...props} />
+			: <Redirect to='/' />
+	)}/>
+)
 
 export default class Login extends React.Component {
 	constructor(props){
@@ -7,6 +35,7 @@ export default class Login extends React.Component {
 		this.state = {
 			username: null,
 			password: null,
+			jwt: null,
 			error: null
 		}
 		this.onSubmit = this.onSubmit.bind(this)
@@ -17,6 +46,7 @@ export default class Login extends React.Component {
 
 	}
 
+	//Authenticates user
 	onSubmit(event){
 		event.preventDefault()	
 		this.setState({ error: null })
@@ -24,11 +54,14 @@ export default class Login extends React.Component {
 		console.log(data)
 		axios.post("http://localhost:2223/login", data)
 		.then(response=>{
-			console.log(response.data.token)
-			this.setState({ error: "Login Successful!" })
+			this.setState({ jwt: response.data.token, error: "Login Successful!" })
+			localStorage.setItem('jwt', this.state.jwt)
+			console.log(this.state.error)
 		})
 		.catch(error=>{
-			this.setState({ error: "Login Failed." })
+			this.setState({ error: "Login Failed.", jwt: null,
+				username: null, password: null})
+			localStorage.setItem('jwt', null)
 			console.log(this.state.error)
 		});
 		// Use token to get to protected page
@@ -67,6 +100,12 @@ export default class Login extends React.Component {
 							<p>
 								{this.state.error}
 							</p>
+							<Router>
+								<div>
+									<Link to='/protected'>Protected Page</Link>
+									<PrivateRoute path='/protected' component={Protected} />
+								</div>
+							</Router>
 	                	</fieldset>
 	                </form>
 	    		</div>
