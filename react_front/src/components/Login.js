@@ -58,7 +58,6 @@ export default class Login extends React.Component {
 			//upon successful login go to /secret
 			
 			history.push('/secret/');
-			history.go()	
 			
 		})
 		.catch(error=>{
@@ -67,7 +66,6 @@ export default class Login extends React.Component {
 			localStorage.setItem('jwt', null)
 			console.log(this.state.error)
 		});
-		// Use token to get to protected page
 
 	}
 

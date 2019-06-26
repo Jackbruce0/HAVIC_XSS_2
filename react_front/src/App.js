@@ -1,8 +1,8 @@
 import React from 'react';
-//import axios from 'axios';
 import './App.css';
 import Home from './components/Home';
 import Secret from './components/Secret';
+import CommentDisplay from './components/CommentDisplay'
 import {
 	Router,
 	Route,
@@ -27,6 +27,7 @@ export default class App extends React.Component {
 					<Switch>
 						<Route path="/" exact component={Home} />
 						<Route path="/secret" exact component={Secret} />
+						<Route path="/comments" exact component={CommentDisplay} />
 					</Switch>
 				</Router>
 			</div>

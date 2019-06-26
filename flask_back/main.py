@@ -29,29 +29,23 @@ class Comment(db.Model):
     text = db.Column(db.String(1000))
     username = db.Column(db.String(80))
 
-#class Todo(db.Model):
-#    id = db.Column(db.Integer, primary_key=True)
-#    text = db.Column(db.String(50))
-#    complete = db.Column(db.Boolean)
-#    user_id = db.Column(db.Integer)
-
 #Why are we using this instead of jwt_required method
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = None
 
-        if 'x-access-token' in request.headers:
-            token = request.headers['x-access-token']
+        if 'Authorization' in request.headers:
+            token = request.headers['Authorization']
 
         if not token:
-            return jsonify({'message' : 'Token is missing!'}), 401
+            return jsonify({'message' : 'Token is missing!'})
 
         try:
             data = jwt.decode(token, app.config['SECRET_KEY'])
             current_user = User.query.filter_by(public_id=data['public_id']).first()
         except:
-            return jsonify({'message' : 'Token is invalid!'}), 401
+            return jsonify({'message' : 'Token is invalid!'})
         
         #'current_user' must be first param in every method implementing 
         #'token_required'
@@ -190,11 +184,11 @@ def login():
     return make_response('Could not verify', 401, {'WWW-Authenticate' : 
         'Basic realm="Login required!"'})
 
-@app.route('/secrets')
-#@token_required
-def secrets():
+@app.route('/secret', methods=['GET'])
+@token_required
+def get_flag(current_user):
     #allow only admins to this endpoint
-    return flask.render_template('secrets.html')
+    return jsonify({'message' : 'FLAG = ;)'}) 
 
 @app.route('/', methods=['GET', 'POST'])
 def my_index():
@@ -212,7 +206,6 @@ def my_index():
                 token = jwt.encode({'public_id' : user.public_id, 'exp' :
                     datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},
                     app.config['SECRET_KEY'])
-                #instead of returning json. input jwt into header
                 return jsonify({'token' : token.decode('UTF-8')})
             else:
                 error = "Login failed"
