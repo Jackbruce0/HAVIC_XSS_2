@@ -4,12 +4,11 @@ import './App.css';
 import Home from './components/Home';
 import Secret from './components/Secret';
 import {
-	BrowserRouter as Router,
+	Router,
 	Route,
-	Link,
-	Redirect,
 	Switch
 } from 'react-router-dom'
+import history from './history';
 
 export default class App extends React.Component {
 	constructor(props){
@@ -24,7 +23,7 @@ export default class App extends React.Component {
 
 		return (
 	    	<div className="App">
-				<Router>
+				<Router history={history}>
 					<Switch>
 						<Route path="/" exact component={Home} />
 						<Route path="/secret" exact component={Secret} />

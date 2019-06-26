@@ -1,13 +1,9 @@
 import React from 'react';
 import axios from 'axios';
-import {
-	BrowserRouter as Router,
-	Route,
-	Link,
-	Redirect
-} from 'react-router-dom'
+import history from '../history'
 
-const fakeAuth = {
+//Auth on client? Bad Idea I would say
+/*const fakeAuth = {
 	isAuthenticated: false,
 	authenticate(cb) {
 		this.isAuthenticated = true
@@ -27,7 +23,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 			? <Component {...props} />
 			: <Redirect to='/' />
 	)}/>
-)
+)*/
 
 export default class Login extends React.Component {
 	constructor(props){
@@ -46,7 +42,8 @@ export default class Login extends React.Component {
 
 	}
 
-	//Authenticates user
+	//Authenticates user (w/ backend) token returned
+	// and stored in local storage
 	onSubmit(event){
 		event.preventDefault()	
 		this.setState({ error: null })
@@ -57,6 +54,12 @@ export default class Login extends React.Component {
 			this.setState({ jwt: response.data.token, error: "Login Successful!" })
 			localStorage.setItem('jwt', this.state.jwt)
 			console.log(this.state.error)
+			
+			//upon successful login go to /secret
+			
+			history.push('/secret/');
+			history.go()	
+			
 		})
 		.catch(error=>{
 			this.setState({ error: "Login Failed.", jwt: null,
@@ -65,6 +68,7 @@ export default class Login extends React.Component {
 			console.log(this.state.error)
 		});
 		// Use token to get to protected page
+
 	}
 
 	onChange(event){
@@ -100,12 +104,6 @@ export default class Login extends React.Component {
 							<p>
 								{this.state.error}
 							</p>
-							<Router>
-								<div>
-									<Link to='/protected'>Protected Page</Link>
-									<PrivateRoute path='/protected' component={Protected} />
-								</div>
-							</Router>
 	                	</fieldset>
 	                </form>
 	    		</div>
