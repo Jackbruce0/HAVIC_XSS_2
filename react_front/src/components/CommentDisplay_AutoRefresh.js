@@ -8,9 +8,16 @@ export default class CommentDisplay_AutoRefresh extends React.Component {
 	componentDidMount(){
 	}
 
+	refresh() {
+		window.location.reload();
+	}
+	
 	render(){
+		
 		return (
 	    	<div className="CommentDisplay_AutoRefresh">
+				<h1>Everyone's a Critic </h1>
+				{setInterval(this.refresh, 5000)}
 				<CommentDisplay />	
 			</div>				
 	  		);

@@ -33,6 +33,10 @@ export default class Secret extends React.Component {
 		event.preventDefault()
 		history.push('/comments/')
 	}
+
+	commandPage(event){
+		//TODO
+	}			
 		
 	render(){
 
@@ -44,6 +48,9 @@ export default class Secret extends React.Component {
 				<br/>
 				<br/>
 				<button onClick={this.viewComments}>View Comments</button>
+				<br/>
+				<br/>
+				<button onClick={this.commandPage}>System Call Submit</button>
 	    	</div>
 	  		);
 	}

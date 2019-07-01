@@ -51,6 +51,7 @@ export default class CommentDisplay_User extends React.Component {
 
 		return (
 	    	<div className="CommentDisplay_User">
+				<h1>Everyone's a critic </h1>
 				<fieldset>
 					<legend>Comments</legend>
 					
