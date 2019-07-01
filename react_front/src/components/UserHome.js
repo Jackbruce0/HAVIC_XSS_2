@@ -1,10 +1,10 @@
 import React from 'react';
 import axios from 'axios';
+import CommentSubmit from './CommentSubmit'
 import history from '../history'
 
-//Non protected endpoint that contains
-//protected "GET FLAG BUTTON" that returns flag value
-export default class Secret extends React.Component {
+//Home page for every non Admin user
+export default class UserHome extends React.Component {
 	constructor(props){
 		super(props)
 		this.state = {
@@ -31,17 +31,18 @@ export default class Secret extends React.Component {
 	
 	viewComments(event){
 		event.preventDefault()
-		history.push('/comments/')
+		history.push('/usercomments/')
 	}
 		
 	render(){
 
 		return (
-	    	<div className="Secret">
-				<h1>THIS IS A SECRET PAGE</h1>
-				<h2>Are you 'Admin'?</h2>
-				<button onClick={this.getFlag}>GET FLAG!</button>
+	    	<div className="UserHome">
+				<h1>Hello there! No secrets going on here.</h1>
+				<h2>I hear the  'Admin' keeps them all to herself.</h2>
 				<br/>
+				<h2>What do you think about this site?</h2>	
+				<CommentSubmit />
 				<br/>
 				<button onClick={this.viewComments}>View Comments</button>
 	    	</div>

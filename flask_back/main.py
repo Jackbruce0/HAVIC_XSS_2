@@ -158,6 +158,22 @@ def get_all_comments():
         
     return jsonify({'comments' : output})
 
+@app.route('/usercomments', methods=['GET'])
+@token_required
+def get_user_comments(current_user):
+    comments = Comment.query.all()
+    approved_users = ['jack', 'jacks friend', current_user.name]
+    output = []
+
+    for comment in comments:
+        comment_data = {}
+        if comment.username in approved_users:
+            comment_data['username'] = comment.username
+            comment_data['text'] = comment.text
+            output.append(comment_data)
+        
+    return jsonify({'comments' : output})
+
 #End of Comment end points
 
 @app.route('/login', methods=['POST'])
@@ -188,6 +204,10 @@ def login():
 @token_required
 def get_flag(current_user):
     #allow only admins to this endpoint
+    if not current_user.admin:
+        return jsonify({'message' : 'You\'re not Admin! Get outta here!'})
+
+
     return jsonify({'message' : 'FLAG = ;)'}) 
 
 @app.route('/', methods=['GET', 'POST'])

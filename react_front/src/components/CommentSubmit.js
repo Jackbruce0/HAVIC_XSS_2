@@ -8,7 +8,7 @@ export default class CommentSubmit extends React.Component {
 	constructor(props){
 		super(props)
 		this.state = {
-			username: "anonymous",
+			username: localStorage.getItem('name'),
 			comment: null,
 			error: null
 		}
@@ -48,7 +48,7 @@ export default class CommentSubmit extends React.Component {
 	    	<div className="CommentSubmit">
 	                <form action="" id="formTwo">
 	                	<fieldset>
-							<legend>Anonymous Comment</legend>
+							<legend>Comment Field</legend>
 	                	    <p>
 	                	    	<label>Comment </label>
 								<textarea name = "comment"

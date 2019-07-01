@@ -9,7 +9,7 @@ var x = '<html><script>alert("this.is.sparta");</script></html>';
 var extractscript=/<script>(.+)<\/script>/gi.exec(x);
 x=x.replace(extractscript[0],"");
 
-export default class CommentDisplay extends React.Component {
+export default class CommentDisplay_User extends React.Component {
 	constructor(props){
 		super(props)
 		this.state = {	                	    		
@@ -26,7 +26,8 @@ export default class CommentDisplay extends React.Component {
 	}
 
 	get_Comments(){
-		axios.get("http://localhost:2223/comments")
+		const jwt = localStorage.getItem('jwt')
+		axios.get("http://localhost:2223/usercomments", { headers: { Authorization: `${jwt}` } })
 		.then(response=>{
 			this.setState({ comments: response.data.comments })
 		})
@@ -34,7 +35,6 @@ export default class CommentDisplay extends React.Component {
 			this.setState({ error: "Could not retrieve comments. " })
 			console.log(this.state.error)
 		});
-		console.log('yes');
 	}
 
 	extract_script(value) {
@@ -50,7 +50,7 @@ export default class CommentDisplay extends React.Component {
 	render(){
 
 		return (
-	    	<div className="CommentDisplay">
+	    	<div className="CommentDisplay_User">
 				<fieldset>
 					<legend>Comments</legend>
 					

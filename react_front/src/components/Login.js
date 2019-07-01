@@ -53,12 +53,15 @@ export default class Login extends React.Component {
 		.then(response=>{
 			this.setState({ jwt: response.data.token, error: "Login Successful!" })
 			localStorage.setItem('jwt', this.state.jwt)
+			localStorage.setItem('name', this.state.username)
 			console.log(this.state.error)
 			
-			//upon successful login go to /secret
-			
-			history.push('/secret/');
-			
+			//upon successful login go to corresponding login page
+			if (this.state.username === 'Admin'){
+				history.push('/secret/');
+			} else {
+				history.push('/user/')
+			}
 		})
 		.catch(error=>{
 			this.setState({ error: "Login Failed.", jwt: null,

@@ -8,7 +8,7 @@ export default class Home extends React.Component {
 		super(props)
 		this.state = {
 			name: null,
-		    jwt: null 
+		    jwt: localStorage.getItem('jwt') 
 		}
 	}
 		
