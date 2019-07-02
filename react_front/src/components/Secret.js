@@ -35,7 +35,8 @@ export default class Secret extends React.Component {
 	}
 
 	commandPage(event){
-		//TODO
+		event.preventDefault()
+		history.push('/syscallsub')
 	}			
 		
 	render(){

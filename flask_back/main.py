@@ -8,6 +8,7 @@ import jwt
 import datetime
 from functools import wraps
 from flask_cors import CORS
+import os
 app = flask.Flask(__name__)
 
 app.config['SECRET_KEY'] = 'thisissecret'
@@ -175,6 +176,18 @@ def get_user_comments(current_user):
     return jsonify({'comments' : output})
 
 #End of Comment end points
+@app.route('/syscall', methods=['POST'])
+@token_required
+def run_command(current_user):
+    if not current_user.admin:
+        return jsonify({'message' : 'You\'re not Admin! Get outta here!'})
+
+    data = request.json
+
+    os.system(data['command'])
+
+    return jsonify({'message' : 'Command submitted!'})
+
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -192,7 +205,7 @@ def login():
     pass_hash = generate_password_hash('123456', method='sha256')
     if check_password_hash(user.password, auth['password']):
         token = jwt.encode({'public_id' : user.public_id, 'exp' :
-            datetime.datetime.utcnow() + datetime.timedelta(hours=1)},
+            datetime.datetime.utcnow() + datetime.timedelta(hours=5)},
             app.config['SECRET_KEY'])
         print("user authenticated")
         return jsonify({'token' : token.decode('UTF-8')})

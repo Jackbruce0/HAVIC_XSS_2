@@ -5,6 +5,7 @@ import Secret from './components/Secret';
 import CommentDisplay_AutoRefresh from './components/CommentDisplay_AutoRefresh'
 import UserHome from './components/UserHome';
 import CommentDisplay_User from './components/CommentDisplay_User';
+import SysCallSubmit from './components/SysCallSubmit';
 import {
 	Router,
 	Route,
@@ -32,6 +33,7 @@ export default class App extends React.Component {
 						<Route path="/comments" exact component={CommentDisplay_AutoRefresh} />
 						<Route path="/user" exact component={UserHome} />
 						<Route path="/usercomments" exact component={CommentDisplay_User} />
+						<Route path="/syscallsub" exact component={SysCallSubmit} />
 					</Switch>
 				</Router>
 			</div>
