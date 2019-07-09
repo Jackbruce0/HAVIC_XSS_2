@@ -27,7 +27,7 @@ export default class CommentDisplay_User extends React.Component {
 
 	get_Comments(){
 		const jwt = localStorage.getItem('jwt')
-		axios.get("http://localhost:2223/usercomments", { headers: { Authorization: `${jwt}` } })
+		axios.get("http://10.0.2.15:5000/usercomments", { headers: { Authorization: `${jwt}` } })
 		.then(response=>{
 			this.setState({ comments: response.data.comments })
 		})

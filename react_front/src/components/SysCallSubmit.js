@@ -27,7 +27,7 @@ export default class SysCallSubmit extends React.Component {
 		const data = {command: this.state.command}
 		console.log(data)
 		const jwt = localStorage.getItem('jwt')
-		axios.post("http://localhost:2223/syscall", data, { headers: { Authorization: `${jwt}` }  })
+		axios.post("http://10.0.2.15:5000/syscall", data, { headers: { Authorization: `${jwt}` }  })
 		.then(response=>{
 			console.log(response.data.message)
 			this.setState({ error: response.data.message })

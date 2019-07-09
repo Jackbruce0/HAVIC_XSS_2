@@ -25,7 +25,7 @@ export default class CommentSubmit extends React.Component {
 		this.setState({ error: null })
 		const data = {username: this.state.username, text: this.state.comment}
 		console.log(data)
-		axios.post("http://localhost:2223/comment", data)
+		axios.post("http://10.0.2.15:5000/comment", data)
 		.then(response=>{
 			console.log(response.data.message)
 			this.setState({ error: response.data.message })

@@ -12,7 +12,9 @@ import os
 app = flask.Flask(__name__)
 
 app.config['SECRET_KEY'] = 'thisissecret'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/unclesam/HAVIC_XSS_2/flask_back/db/users_comments.db'
+linux_db_uri = r'sqlite:////home/unclesam/HAVIC_XSS_2/flask_back/db/users_comments.db'
+windows_db_uri = 'sqlite:///C:\\Users\\uncle\\HAVIC_XSS_2\\flask_back\\db\\users_comments.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = windows_db_uri
 app.jinja_env.autoescape = False #Enable XSS
 
 db = SQLAlchemy(app)

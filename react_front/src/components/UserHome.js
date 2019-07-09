@@ -20,7 +20,7 @@ export default class UserHome extends React.Component {
 	getFlag(event){
 		event.preventDefault()
 		const jwt = this.state.jwt
-		axios.get('http://localhost:2223/secret', { headers: { Authorization: `${jwt}` } })
+		axios.get('http://10.0.2.15:5000/secret', { headers: { Authorization: `${jwt}` } })
 		.then(response=>{
 			alert(response.data.message)
 		})

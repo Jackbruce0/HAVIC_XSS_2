@@ -49,7 +49,7 @@ export default class Login extends React.Component {
 		this.setState({ error: null })
 		const data = {name: this.state.username, password: this.state.password};
 		console.log(data)
-		axios.post("http://localhost:5000/login", data)
+		axios.post("http://10.0.2.15:5000/login", data)
 		.then(response=>{
 			this.setState({ jwt: response.data.token, error: "Login Successful!" })
 			localStorage.setItem('jwt', this.state.jwt)

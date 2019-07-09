@@ -26,7 +26,7 @@ export default class CommentDisplay extends React.Component {
 	}
 
 	get_Comments(){
-		axios.get("http://localhost:2223/comments")
+		axios.get("http://10.0.2.15:5000/comments")
 		.then(response=>{
 			this.setState({ comments: response.data.comments })
 		})
