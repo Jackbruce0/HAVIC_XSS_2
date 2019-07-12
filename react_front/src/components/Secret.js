@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import history from '../history'
+import { server_ip } from '../constants';
 
 //Non protected endpoint that contains
 //protected "GET FLAG BUTTON" that returns flag value
@@ -20,7 +21,7 @@ export default class Secret extends React.Component {
 	getFlag(event){
 		event.preventDefault()
 		const jwt = this.state.jwt
-		axios.get('http://10.0.2.15:5000/secret', { headers: { Authorization: `${jwt}` } })
+		axios.get("http://"+server_ip+":5000/secret", { headers: { Authorization: `${jwt}` } })
 		.then(response=>{
 			alert(response.data.message)
 		})

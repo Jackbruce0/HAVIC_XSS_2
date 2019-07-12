@@ -1,29 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-import history from '../history'
-
-//Auth on client? Bad Idea I would say
-/*const fakeAuth = {
-	isAuthenticated: false,
-	authenticate(cb) {
-		this.isAuthenticated = true
-		setTimeout(cb, 100) // fake async
-	},
-	signout(cb) {
-		this.isAuthenticated = false
-		setTimeout(cb, 100) // fake async
-	}
-}
-
-const Protected = () => <h3>Protected</h3>
-	
-const PrivateRoute = ({ component: Component, ...rest }) => (
-	<Route {...rest} render={(props) => (
-		fakeAuth.isAuthenticated === true
-			? <Component {...props} />
-			: <Redirect to='/' />
-	)}/>
-)*/
+import history from '../history';
+import { server_ip } from '../constants';
 
 export default class Login extends React.Component {
 	constructor(props){
@@ -38,10 +16,6 @@ export default class Login extends React.Component {
 		this.onChange = this.onChange.bind(this)
 	}
 
-	componentDidMount(){
-
-	}
-
 	//Authenticates user (w/ backend) token returned
 	// and stored in local storage
 	onSubmit(event){
@@ -49,7 +23,7 @@ export default class Login extends React.Component {
 		this.setState({ error: null })
 		const data = {name: this.state.username, password: this.state.password};
 		console.log(data)
-		axios.post("http://10.0.2.15:5000/login", data)
+		axios.post("http://"+server_ip+":5000/login", data)
 		.then(response=>{
 			this.setState({ jwt: response.data.token, error: "Login Successful!" })
 			localStorage.setItem('jwt', this.state.jwt)

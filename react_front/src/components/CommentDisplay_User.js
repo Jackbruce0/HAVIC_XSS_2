@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { server_ip } from '../constants';
 
 // This component will retrieve all items from comments db and 
 // display them
@@ -27,7 +28,7 @@ export default class CommentDisplay_User extends React.Component {
 
 	get_Comments(){
 		const jwt = localStorage.getItem('jwt')
-		axios.get("http://10.0.2.15:5000/usercomments", { headers: { Authorization: `${jwt}` } })
+		axios.get("http://"+server_ip+":5000/usercomments", { headers: { Authorization: `${jwt}` } })
 		.then(response=>{
 			this.setState({ comments: response.data.comments })
 		})

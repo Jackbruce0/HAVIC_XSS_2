@@ -11,23 +11,23 @@ export default class UserHome extends React.Component {
 			name: null,
 		    jwt: localStorage.getItem('jwt')
 		}
-		this.getFlag = this.getFlag.bind(this);
+		// this.getFlag = this.getFlag.bind(this);
 	}
 
 	componentDidMount(){
 	}
 
-	getFlag(event){
-		event.preventDefault()
-		const jwt = this.state.jwt
-		axios.get('http://10.0.2.15:5000/secret', { headers: { Authorization: `${jwt}` } })
-		.then(response=>{
-			alert(response.data.message)
-		})
-		.catch(error=>{
-			console.log("Request to /secret failed")
-		})
-	}
+	// getFlag(event){
+	// 	event.preventDefault()
+	// 	const jwt = this.state.jwt
+	// 	axios.get('http://'+server_ip+':5000/secret', { headers: { Authorization: `${jwt}` } })
+	// 	.then(response=>{
+	// 		alert(response.data.message)
+	// 	})
+	// 	.catch(error=>{
+	// 		console.log("Request to /secret failed")
+	// 	})
+	// }
 	
 	viewComments(event){
 		event.preventDefault()

@@ -16,16 +16,12 @@ export default class CommentSubmit extends React.Component {
 		this.onChange = this.onChange.bind(this)
 	}
 
-	componentDidMount(){
-
-	}
-
 	onSubmit(event){
 		event.preventDefault()
 		this.setState({ error: null })
 		const data = {username: this.state.username, text: this.state.comment}
 		console.log(data)
-		axios.post("http://10.0.2.15:5000/comment", data)
+		axios.post("http://10.10.10.1:5000/comment", data)
 		.then(response=>{
 			console.log(response.data.message)
 			this.setState({ error: response.data.message })

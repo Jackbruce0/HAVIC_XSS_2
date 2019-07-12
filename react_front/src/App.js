@@ -18,7 +18,7 @@ export default class App extends React.Component {
 		super(props)
 		this.state = {
 			name: localStorage.getItem('name'),
-		    jwt: localStorage.getItem('jwt') 
+			jwt: localStorage.getItem('jwt'),
 		}
 	}
 

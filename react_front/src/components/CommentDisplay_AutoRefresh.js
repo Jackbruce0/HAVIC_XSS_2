@@ -4,9 +4,6 @@ import CommentDisplay from './CommentDisplay';
 // This component will render CommentDisplay and automatically
 // refresh to simiulate active Administrator
 export default class CommentDisplay_AutoRefresh extends React.Component {
-	
-	componentDidMount(){
-	}
 
 	refresh() {
 		window.location.reload();

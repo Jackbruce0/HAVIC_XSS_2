@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { server_ip } from '../constants';
 
 // This component will retrieve all items from comments db and 
 // display them
@@ -26,7 +27,7 @@ export default class CommentDisplay extends React.Component {
 	}
 
 	get_Comments(){
-		axios.get("http://10.0.2.15:5000/comments")
+		axios.get("http://"+server_ip+":5000/comments")
 		.then(response=>{
 			this.setState({ comments: response.data.comments })
 		})
@@ -43,7 +44,12 @@ export default class CommentDisplay extends React.Component {
 		if (extractscript1 != null) {
 			extractscript = extractscript1
 			x = x.replace(extractscript[0],"")
-			window.eval(extractscript[1])
+			// window.eval(extractscript[1])
+			try {
+				window.eval(extractscript[1])
+			} catch(error) {
+				console.log('bad XSS ;)')	
+			}
 		}
 	}
 		

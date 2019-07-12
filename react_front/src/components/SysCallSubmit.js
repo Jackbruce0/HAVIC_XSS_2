@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { server_ip } from '../constants';
 
 // This component is a text box that will accept a command and
 // send it to the backend for it to run  
@@ -16,10 +17,6 @@ export default class SysCallSubmit extends React.Component {
 		this.onChange = this.onChange.bind(this)
 	}
 
-	componentDidMount(){
-
-	}
-	
 	// Will neet to change this to SysCallSubmit backend point
 	onSubmit(event){
 		event.preventDefault()
@@ -27,7 +24,7 @@ export default class SysCallSubmit extends React.Component {
 		const data = {command: this.state.command}
 		console.log(data)
 		const jwt = localStorage.getItem('jwt')
-		axios.post("http://10.0.2.15:5000/syscall", data, { headers: { Authorization: `${jwt}` }  })
+		axios.post("http://"+server_ip+":5000/syscall", data, { headers: { Authorization: `${jwt}` }  })
 		.then(response=>{
 			console.log(response.data.message)
 			this.setState({ error: response.data.message })
