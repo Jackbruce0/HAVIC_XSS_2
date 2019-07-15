@@ -13,6 +13,7 @@ export default class Secret extends React.Component {
 		    jwt: localStorage.getItem('jwt')
 		}
 		this.getFlag = this.getFlag.bind(this);
+		this.commandPage = this.commandPage.bind(this);
 	}
 
 	componentDidMount(){
@@ -26,7 +27,7 @@ export default class Secret extends React.Component {
 			alert(response.data.message)
 		})
 		.catch(error=>{
-			console.log("Request to /secret failed")
+			alert("Nice try funny guy! You ain't no Admin")
 		})
 	}
 	
@@ -37,7 +38,14 @@ export default class Secret extends React.Component {
 
 	commandPage(event){
 		event.preventDefault()
-		history.push('/syscallsub')
+		const jwt = this.state.jwt
+		axios.get("http://"+server_ip+":5000/secret", { headers: { Authorization: `${jwt}` } })
+		.then(response=>{
+			history.push('/syscallsub')
+		})
+		.catch(error=>{
+			alert("Nice try funny guy! You ain't no Admin")
+		})
 	}			
 		
 	render(){

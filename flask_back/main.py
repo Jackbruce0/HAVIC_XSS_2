@@ -42,13 +42,13 @@ def token_required(f):
             token = request.headers['Authorization']
 
         if not token:
-            return jsonify({'message' : 'Token is missing!'})
+            return jsonify({'message' : 'Token is missing!'}), 403
 
         try:
             data = jwt.decode(token, app.config['SECRET_KEY'])
             current_user = User.query.filter_by(public_id=data['public_id']).first()
         except:
-            return jsonify({'message' : 'Token is invalid!'})
+            return jsonify({'message' : 'Token is invalid!'}), 403
         
         #'current_user' must be first param in every method implementing 
         #'token_required'
@@ -220,7 +220,7 @@ def login():
 def get_flag(current_user):
     #allow only admins to this endpoint
     if not current_user.admin:
-        return jsonify({'message' : 'You\'re not Admin! Get outta here!'})
+        return jsonify({'message' : 'You\'re not Admin! Get outta here!'}), 403
 
 
     return jsonify({'message' : 'FLAG = ;)'}) 
