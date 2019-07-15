@@ -223,7 +223,7 @@ def get_flag(current_user):
         return jsonify({'message' : 'You\'re not Admin! Get outta here!'}), 403
 
 
-    return jsonify({'message' : 'FLAG = ;)'}) 
+    return jsonify({'message' : 'FLAG 1 = HAVIC-JCDF-8320)'}) 
 
 @app.route('/', methods=['GET', 'POST'])
 def my_index():
