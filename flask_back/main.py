@@ -98,6 +98,12 @@ def get_one_user(current_user, public_id):
 #@token_required
 def create_user():
     data = request.get_json()
+
+    #Do not create user if name already taken
+    user = User.query.filter_by(name = data['name']).first()
+    if user:
+        return jsonify({'message': 'Registration failed. User was not created!'})
+
     hashed_password = generate_password_hash(data['password'], method='sha256')
     new_user = User(public_id=str(uuid.uuid4()), name=data['name'], 
             password=hashed_password, admin=False)
@@ -118,7 +124,6 @@ def promote_user(public_id):
     user.admin = True
     db.session.commit()
     
-
     return jsonify({'message' : 'The user has been promoted!'})
 
 @app.route('/user/<public_id>', methods=['DELETE'])
@@ -249,5 +254,16 @@ def my_index():
 
     return flask.render_template('index.html', error=error, posts=posts) 
 
+def initialize_user_db():
+    hashed_password = generate_password_hash("@dmin5rul3Z", method='sha256')
+    new_user = User(public_id=str(uuid.uuid4()), name="Admin", 
+            password=hashed_password, admin=True)
+    db.session.add(new_user)
+    db.session.commit()
+
 if __name__ == '__main__':
+    users = User.query.all()
+    if not users:
+        initialize_user_db()
+
     app.run(debug=True, host='0.0.0.0')
