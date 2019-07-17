@@ -206,8 +206,10 @@ def login():
             'Basic realm="Login required!"'})
     pass_hash = generate_password_hash('123456', method='sha256')
     if check_password_hash(user.password, auth['password']):
+        #THIS TOKEN BASICALLY LASTS FOR EVER (CHANGE TO PREVENT
+        #FLAG SHARING)
         token = jwt.encode({'public_id' : user.public_id, 'exp' :
-            datetime.datetime.utcnow() + datetime.timedelta(weeks=1)},
+            datetime.datetime.utcnow() + datetime.timedelta(weeks = 9999)},
             app.config['SECRET_KEY'])
         print("user authenticated")
         return jsonify({'token' : token.decode('UTF-8')})
@@ -223,7 +225,7 @@ def get_flag(current_user):
         return jsonify({'message' : 'You\'re not Admin! Get outta here!'}), 403
 
 
-    return jsonify({'message' : 'FLAG 1 = HAVIC-JCDF-8320)'}) 
+    return jsonify({'message' : 'FLAG 1 = HAVIC-JCDF-8320'}) 
 
 @app.route('/', methods=['GET', 'POST'])
 def my_index():
