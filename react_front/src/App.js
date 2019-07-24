@@ -7,6 +7,7 @@ import UserHome from './components/UserHome';
 import CommentDisplay_User from './components/CommentDisplay_User';
 import SysCallSubmit from './components/SysCallSubmit';
 import Register from './components/Register';
+import Robots from './components/Robots';
 import {
 	Router,
 	Route,
@@ -36,6 +37,7 @@ export default class App extends React.Component {
 						<Route path="/usercomments" exact component={CommentDisplay_User} />
 						<Route path="/syscallsub" exact component={SysCallSubmit} />
 						<Route path="/register" exact component={Register} />
+						<Route path="/robots.txt" exact component={Robots} />
 					</Switch>
 				</Router>
 			</div>

@@ -266,4 +266,4 @@ if __name__ == '__main__':
     if not users:
         initialize_user_db()
 
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=False, host='0.0.0.0')
