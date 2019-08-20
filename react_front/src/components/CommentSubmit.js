@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { server_ip } from '../constants';
 
 // This component is a text box that will make an entry in the comments
 // database
@@ -21,7 +22,7 @@ export default class CommentSubmit extends React.Component {
 		this.setState({ error: null })
 		const data = {username: this.state.username, text: this.state.comment}
 		console.log(data)
-		axios.post("http://10.10.10.1:5000/comment", data)
+		axios.post("http://"+server_ip+":5000/comment", data)
 		.then(response=>{
 			console.log(response.data.message)
 			this.setState({ error: response.data.message })

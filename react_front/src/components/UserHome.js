@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import CommentSubmit from './CommentSubmit'
 import history from '../history'
+import {server_ip} from '../constants'
 
 //Home page for every non Admin user
 export default class UserHome extends React.Component {
@@ -9,29 +10,32 @@ export default class UserHome extends React.Component {
 		super(props)
 		this.state = {
 			name: null,
-		    jwt: localStorage.getItem('jwt')
+			jwt: localStorage.getItem('jwt'), 
+			message: null
 		}
-		// this.getFlag = this.getFlag.bind(this);
+		this.refreshComments = this.refreshComments.bind(this);
 	}
 
 	componentDidMount(){
 	}
 
-	// getFlag(event){
-	// 	event.preventDefault()
-	// 	const jwt = this.state.jwt
-	// 	axios.get('http://'+server_ip+':5000/secret', { headers: { Authorization: `${jwt}` } })
-	// 	.then(response=>{
-	// 		alert(response.data.message)
-	// 	})
-	// 	.catch(error=>{
-	// 		console.log("Request to /secret failed")
-	// 	})
-	// }
 	
 	viewComments(event){
 		event.preventDefault()
 		history.push('/usercomments/')
+	}
+
+	refreshComments(event){
+		event.preventDefault()
+		const jwt = localStorage.getItem('jwt')
+		axios.get("http://"+server_ip+":5000/usercomments_delete", { headers: { Authorization: `${jwt}` } })
+		.then(response=>{
+			this.setState({ message : response.data.message })
+		})
+		.catch(error=>{
+			this.setState({ error: "Something bad happened... like really bad" })
+			console.log(this.state.error)
+		});
 	}
 		
 	render(){
@@ -45,6 +49,10 @@ export default class UserHome extends React.Component {
 				<CommentSubmit />
 				<br/>
 				<button onClick={this.viewComments}>View Comments</button>
+				<h3>Did you mess up your comments?</h3>
+				<button onClick={this.refreshComments}>Refresh Comment DB</button>
+				<br/>
+				{this.state.message}
 	    	</div>
 	  		);
 	}

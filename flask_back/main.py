@@ -9,6 +9,8 @@ import datetime
 from functools import wraps
 from flask_cors import CORS
 import os
+import time
+from threading import Thread, Event
 app = flask.Flask(__name__)
 
 app.config['SECRET_KEY'] = 'thisissecret'
@@ -19,6 +21,10 @@ app.jinja_env.autoescape = False #Enable XSS
 
 db = SQLAlchemy(app)
 CORS(app)
+
+#for db resetting
+comment_check = None
+
 # Example for creating a db of User's and their todo tasks
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -163,7 +169,7 @@ def get_all_comments():
         comment_data['username'] = comment.username
         comment_data['text'] = comment.text
         output.append(comment_data)
-        
+
     return jsonify({'comments' : output})
 
 @app.route('/usercomments', methods=['GET'])
@@ -181,7 +187,19 @@ def get_user_comments(current_user):
             output.append(comment_data)
         
     return jsonify({'comments' : output})
+    
+@app.route('/usercomments_delete', methods=['GET'])
+@token_required
+def delete_user_comments(current_user):
+    comments = Comment.query.filter_by(username=current_user.name)
+    print(comments)
+    for comment in comments:
+        db.session.delete(comment)
 
+    db.session.commit()
+    
+    return jsonify({'message' : 'comments successfully deleted'})
+    
 #End of Comment end points
 @app.route('/syscall', methods=['POST'])
 @token_required
@@ -232,6 +250,28 @@ def get_flag(current_user):
 
     return jsonify({'message' : 'FLAG 1 = HAVIC-JCDF-8320'}) 
 
+@app.route('/commentCheck', methods=['GET'])
+def comment_timer_update():
+    global comment_check
+    if comment_check is None:
+        comment_check = Thread(target=comment_timeout_check)
+        print("hi")
+
+    #update timer
+    return jsonify({'message' : 'Nice one man'})
+
+def comment_timeout_check():
+    while True:
+        
+        print("hi")
+       # if exp_time is not None and datetime.now() > exp_time:
+       #     initialize_comments_db()
+       #     exp_time = None
+       #     #stop thread
+       #     break
+        time.sleep(1)
+
+
 @app.route('/', methods=['GET', 'POST'])
 def my_index():
     posts = []
@@ -254,6 +294,22 @@ def my_index():
 
     return flask.render_template('index.html', error=error, posts=posts) 
 
+def initialize_comments_db():
+    #delete all comments
+    comments = Comment.query.all()
+    for comment in comments:
+        db.session.delete(comment)
+    db.session.commit()
+
+    #initialize with default comments
+    new_comment = Comment(text='This place is okey, these secrets really aint what they used to be', username='jack')
+    db.session.add(new_comment)
+    new_comment = Comment(text='I LOVE this site! So many secrets, not enough time', username='jacks friend')
+    db.session.add(new_comment)
+    db.session.commit()
+
+    print("comments db refreshed")
+
 def initialize_user_db():
     hashed_password = generate_password_hash("@dmin5rul3Z", method='sha256')
     new_user = User(public_id=str(uuid.uuid4()), name="Admin", 
@@ -265,5 +321,4 @@ if __name__ == '__main__':
     users = User.query.all()
     if not users:
         initialize_user_db()
-
-    app.run(debug=False, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0')

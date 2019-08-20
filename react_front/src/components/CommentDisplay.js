@@ -35,7 +35,6 @@ export default class CommentDisplay extends React.Component {
 			this.setState({ error: "Could not retrieve comments. " })
 			console.log(this.state.error)
 		});
-		console.log('yes');
 	}
 
 	extract_script(value) {
