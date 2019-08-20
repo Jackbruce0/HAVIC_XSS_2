@@ -197,7 +197,8 @@ def delete_user_comments(current_user):
         db.session.delete(comment)
 
     db.session.commit()
-    
+
+    os.system('C:\\Users\\uncle\\HAVIC_XSS_2\\lab_scripts\\go_to_comments.vbs') 
     return jsonify({'message' : 'comments successfully deleted'})
     
 #End of Comment end points
