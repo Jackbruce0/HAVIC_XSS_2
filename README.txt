@@ -17,7 +17,7 @@ reasons.
 
 OPERATING INSTRUCTIONS:
 "startup.sh" will clear comments db to default values and launch back end
-and front end services simultaneosly. (lol this is gone now cus windows sux)
+and front end services simultaneosly.
 
 "db_refresh.py" will just clear comments db to default values
 
